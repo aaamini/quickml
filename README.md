@@ -6,7 +6,7 @@ The package should handle factor variables properly by coding them to dummy vari
 
 Run `tests/sandbox.R` for a quick demonsteration. It should produce a plot like this
 
-<img src="https://user-images.githubusercontent.com/17173393/175207094-1e8668be-c1df-42fc-bb30-13208b60cb9b.png" width = "400"> 
+<img src="https://user-images.githubusercontent.com/17173393/175207094-1e8668be-c1df-42fc-bb30-13208b60cb9b.png" width = "600"> 
 
 
 The package is under development, including the documentation. 
