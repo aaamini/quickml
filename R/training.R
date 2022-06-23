@@ -21,7 +21,7 @@ quickml = function(X, y,
   X = code_factors(X, drop_intercept = TRUE)
 
   # report_msg1(sprintf("Running benchmark with nreps = %d\n", nreps))
-  report_info1("Running benchmark with nreps = {nreps}")
+  report_info1(sprintf("Running benchmark with nreps = %d", nreps))
   train_idxs = get_splits(y, p = 0.7, times = nreps)
   methods = list(dt = fit_dt, xgb = fit_xgb, rf = fit_rf, lr2 = fit_lr2)
   mtd_names = names(methods)
