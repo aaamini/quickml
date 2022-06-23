@@ -5,6 +5,8 @@ The package allows one to quickly run a couple of most common binary classificat
 The package should handle factor variables properly by coding them to dummy variables, and in later editions should have a basic imputation method for missing values. 
 
 Run `tests/sandbox.R` for a quick demonsteration. It should produce a plot like this
-![auc_boxplot](https://user-images.githubusercontent.com/17173393/175206797-948af52f-b300-4048-8e33-fc3f40caf9a9.png){width=25%}
+
+<img src="https://user-images.githubusercontent.com/17173393/175207094-1e8668be-c1df-42fc-bb30-13208b60cb9b.png" width = "400"> 
+
 
 The package is under development, including the documentation. 
