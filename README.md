@@ -58,8 +58,8 @@ data = Sonar
 y = data$Class
 X = subset(data, select=-Class)
 res = quickml(X, y)
-summarize_bench(res)
-plot_bench(res, save = TRUE, type = "png")
+summarize(res)
+plot(res, save = TRUE, type = "png")
 ```
 
 It produces the following output:

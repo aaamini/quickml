@@ -19,8 +19,8 @@ get_splits = function(y, p = 0.5, times = 1) {
 }
 
 #' @importFrom cli cli_alert_info
-report_info1 = function(msg) {
-  if (opt.env$verbose > 0) cli::cli_alert_info(msg)
+report_info1 = function(...) {
+  if (opt.env$verbose > 0) cli::cli_alert_info(...)
 }
 
 #' @importFrom cli cli_alert_info

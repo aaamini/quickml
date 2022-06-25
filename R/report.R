@@ -6,8 +6,13 @@ rename_methods = function(res) {
 }
 
 #' @export
+summarize = function(x) {
+  UseMethod("summarize")
+}
+
+#' @export
 #' @importFrom dplyr %>%
-summarize_bench = function(res) {
+summarize.aucres = function(res) {
   res %>%
     rename_methods %>%
     dplyr::group_by(method) %>%
@@ -18,7 +23,7 @@ summarize_bench = function(res) {
 #' @export
 #' @importFrom dplyr %>%
 #' @import ggplot2
-plot_bench = function(res, save = FALSE, type = "pdf") {
+plot.aucres = function(res, save = FALSE, type = "pdf") {
   p = res %>%
     rename_methods %>%
     ggplot(aes(x=method, y = auc, color = method)) +

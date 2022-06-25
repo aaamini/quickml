@@ -24,8 +24,10 @@ X = sample_cols(X, 60)
 
 fastml_options(verbose = 2)
 res = quickml(X, y)
-summarize_bench(res)
-plot_bench(res, save = TRUE, type = "png")
+summarize(res)
+plot(res, save = TRUE, type = "png")
+
+
 
 # X = char_to_factor(X)
 #

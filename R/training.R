@@ -39,6 +39,8 @@ quickml = function(X, y,
   report_info1(sprintf("Data (now) has %d samples on %d variables (%d factors, %d numeric)",
                        nrow(X), ncol(X), count_factors(X), count_numerics(X)))
 
+  class_prop = as.numeric(signif(table(y) / length(y),2))
+  report_info1(paste0("Class proportions: ", paste0(class_prop, collapse = ", ")))
   if (is.null(nreps)) nreps = decide_nreps(X)
   # # report_msg1(sprintf("Running benchmark with nreps = %d\n", nreps))
   # report_info1(sprintf("Running benchmark with nreps = %d", nreps))
@@ -87,6 +89,7 @@ quickml = function(X, y,
     }))
   }))
   report_succ1("Benchmark concluded successfully.")
+  attr(res, "class") = c("aucres", class(res))
   res
 }
 
