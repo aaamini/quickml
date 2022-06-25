@@ -1,12 +1,78 @@
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
 # quickml
 
-The package allows one to quickly run a couple of most common binary classification algorithms on a new problem to get of idea of the limits of performance. It makes some guesses about the values of the hyperparameters (mostly the default values!) and avoids hyperparameter tuning in favor of performance. 
+<!-- badges: start -->
+<!-- badges: end -->
 
-The package should handle factor variables properly by coding them to dummy variables, and in later editions should have a basic imputation method for missing values. 
+**quickml** is an R package that aims to provide a full ML pipeline to
+rapidly benchmark a binary classification problem by running some of the
+most common algorithms on it. Ideally, once fully functional, it should
+handle any *raw* dataset, automatically cleaning it up, recoding
+factors, filtering problematic features, imputing missing values, doing
+some basic hyperparameter tuning, etc. and run and report the tests on
+it. By comparing the performance of multiple methods on the same task,
+it will give you an idea of the limits of performance achievable on the
+given dataset. In other words, it tells you how hard of classification
+task it is.
 
-Run `tests/sandbox.R` for a quick demonsteration. It should produce a plot like this
+Some of the pre-test steps are:
 
-<img src="https://user-images.githubusercontent.com/17173393/175207094-1e8668be-c1df-42fc-bb30-13208b60cb9b.png" width = "600"> 
+-   Converting character features to factors (i.e., categorical
+    variables)
+-   Removing highly diverse factors (e.g., phone numbers or IDs)
+-   TODO: Removing almost constant factors
+-   Coding factors into dummy variables.
+-   TODO: Imputing on train/test splits
+-   Hyperparameter tuning for some of the alogorithms
+
+Currently the following algorithms are used for the benchmark:
+
+-   **Random Forest (RF)**: No tuning.
+-   **Gradient Boosted Trees (XGB)**: Uses XGBoost implementation. Some basic tuning (number of rounds by early stopping on validation AUC, max_depth, eta).
+-   **Regularized Logistic Regression (RLR)**: L2-regularized.
+    Implemented via `glmnet`
+    <!--- with alpha parameter decided between 0 or 1 (L2 vs. L1regularization, respectively) during hyperparameter tuning.--->
+    Regularization parameter lambda is tuned.
+-   **Decision Tree (DecT)**: A single decision tree. No tuning.
+-   **Kernel SVM (KSVM)**: SVM with the Gaussian (a.k.a Radial Basis)
+    kernel. No tuning
+
+## Installation
+
+quickml is under development. You can install the latest version in R by
+running the follwoing command
+
+``` r
+devtools::install_github("aaamini/quickml")
+```
+
+## Example
+
+This is a basic example which shows you how to solve a common problem:
+
+``` r
+library(quickml)
+library(mlbench)
+
+## basic example code
+data("Sonar")
+data = Sonar
+y = data$Class
+X = subset(data, select=-Class)
+res = quickml(X, y)
+summarize_bench(res)
+plot_bench(res, save = TRUE, type = "png")
+```
+
+It produces the following output:
+
+![](man/figures/quickml_output.png){ width=550px }
+
+and the following plot:
+
+![](man/figures/auc_boxplot.png){ width=500px }
 
 
-The package is under development, including the documentation. 
+

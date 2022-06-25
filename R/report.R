@@ -22,7 +22,7 @@ plot_bench = function(res, save = FALSE, type = "pdf") {
   p = res %>%
     rename_methods %>%
     ggplot(aes(x=method, y = auc, color = method)) +
-    geom_boxplot() + theme_minimal(base_size = 16) +
+    geom_boxplot() + theme_minimal(base_size = 12) +
     xlab("Method") + ylab("AUC") +
     theme(
       legend.background = ggplot2::element_blank(),
@@ -32,6 +32,6 @@ plot_bench = function(res, save = FALSE, type = "pdf") {
       # legend.text = ggplot2::element_text(size=18),
     ) +
     guides(colour = ggplot2::guide_legend(keywidth = 2, keyheight = 1.25))
-  if (save) ggsave(sprintf("auc_boxplot.%s", type), width = 5, height = 5)
+  if (save) ggsave(sprintf("auc_boxplot.%s", type), width = 4, height = 4.5)
   p
 }

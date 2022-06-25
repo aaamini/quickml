@@ -84,14 +84,16 @@ fit_rlr = function(Xpair, ypair, hparams) {
 
 
 tune_rlr = function(Xtrain, ytrain) {
-  lambda_vec = 10^seq(-2, 2, len=25)
+  idx = get_splits(ytrain, p = 0.7, times = 1)[[1]]  # split into further train/valid
+
+  lambda_vec = 10^seq(-1, 1, len=25)
   best_auc = -Inf
   best_idx = NULL
   best_alpha = NULL
-  for (a in seq(0,1,by=1)) { # can try seq(0,1,by=0.25) but due to a bug in glmnet the lambda that is found will lead to AUC = 0.5 in training
-    model = glmnet(Xpair$train, factor(ypair$train), family="binomial", alpha = a, lambda=lambda_vec)
-    Yh_prob = predict(model, as.matrix(Xpair$test), type = "response")
-    auc_values = apply(Yh_prob, 2, function(yh_prob) get_auc(ypair$test, yh_prob))
+  for (a in c(0)) { # can try seq(0,1,by=0.25) but do to the sensitivity of ell1 reg (or a bug in glmnet) it will most likely give AUC = 0.5 when alpha is anything other than 0
+    model = glmnet(Xtrain[idx, ], factor(ytrain[idx]), family="binomial", alpha = a, lambda=lambda_vec)
+    Yh_prob = predict(model, as.matrix(Xtrain[!idx, ]), type = "response")
+    auc_values = apply(Yh_prob, 2, function(yh_prob) get_auc(ytrain[!idx], yh_prob))
 
     max_idx = which.max(auc_values)
     max_auc = auc_values[max_idx]
