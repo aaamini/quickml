@@ -23,6 +23,12 @@ report_info1 = function(msg) {
   if (opt.env$verbose > 0) cli::cli_alert_info(msg)
 }
 
+#' @importFrom cli cli_alert_info
+report_succ1 = function(msg) {
+  if (opt.env$verbose > 0) cli::cli_alert_success(msg)
+}
+
+
 report_msg1 = function(msg) {
   if (opt.env$verbose > 0) cat(msg)
 }

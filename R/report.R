@@ -1,7 +1,7 @@
 #' @export
 rename_methods = function(res) {
   res$method = factor(res$method)
-  levels(res$method) = list(`RF` = "rf", XGB = "xgb", `LR-2` = "lr2", `DecT` = "dt")
+  levels(res$method) = list(`RF` = "rf", XGB = "xgb", `LR-2` = "lr2", `DecT` = "dt", KSVM = "ksvm")
   res
 }
 

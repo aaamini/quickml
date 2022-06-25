@@ -1,3 +1,12 @@
+char_to_factor = function(X) {
+  idx = sapply(X, is.character)
+  if (sum(idx) > 0) {
+    report_info1("Converting character variables to factor.")
+    X[, idx] = lapply(X[,idx], as.factor)
+  }
+  X
+}
+
 factor_to_numeric = function(fac) {
   as.numeric(fac)-1
 }
