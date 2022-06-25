@@ -11,7 +11,16 @@ quickml = function(X, y,
                      # ncore = 1,
                      verbose = 1) {
 
-  if (is.null(nreps)) nreps = decide_nreps(X)
+  if (!is.null(dim(y))) stop("y should be a vector.")
+  if (nrow(X) != length(y)) stop("nrow(X) should be the same as length(y).")
+
+  y_na_idx = is.na(y)
+  if (any(y_na_idx)) {
+    report_info1("Missing values in `y`. Removing the corresponding rows.")
+    X = X[!y_na_idx, , drop=FALSE]
+    y = y[!y_na_idx]
+  }
+
   if (!is.factor(y)) y = factor(y)
   if (length(levels(y)) != 2) {
     report_info1("Only binary classification implemented: Collapsing 'y' to two levels.\n")
@@ -19,15 +28,25 @@ quickml = function(X, y,
   }
   y = factor_to_numeric(y)
   X = char_to_factor(X)
+  X = remove_hd_factors(X)
+
+  if (any(is.na(X))) {
+    stop("Missing values in features. Imputation not implemented yet. Stopping.")
+  }
+
   X = code_factors(X, drop_intercept = TRUE)
 
+  report_info1(sprintf("Data (now) has %d samples on %d variables (%d factors, %d numeric)",
+                       nrow(X), ncol(X), count_factors(X), count_numerics(X)))
+
+  if (is.null(nreps)) nreps = decide_nreps(X)
   # # report_msg1(sprintf("Running benchmark with nreps = %d\n", nreps))
   # report_info1(sprintf("Running benchmark with nreps = %d", nreps))
   train_idxs = get_splits(y, p = 0.7, times = nreps)
   methods = list(dt = c(tune_dt, fit_dt),
                  xgb = c(tune_xgb, fit_xgb),
                  rf = c(tune_rf, fit_rf),
-                 lr2 = c(tune_lr2, fit_lr2),
+                 rlr = c(tune_rlr, fit_rlr),
                  ksvm = c(tune_ksvm, fit_ksvm))
   mtd_names = names(methods)
 
@@ -64,7 +83,7 @@ quickml = function(X, y,
       # fit = methods[[j]][[2]](Xpair, ypair, hparams)
       delta_t = Sys.time() - t0
       roc = get_roc(ypair$test, fit$yh_prob)
-      data.frame(rep = i, method = mtd_names[j], auc = get_auc(roc), delta_t = delta_t)
+      data.frame(rep = i, method = mtd_names[j], auc = roc2auc(roc), delta_t = delta_t)
     }))
   }))
   report_succ1("Benchmark concluded successfully.")

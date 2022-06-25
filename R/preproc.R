@@ -2,10 +2,40 @@ char_to_factor = function(X) {
   idx = sapply(X, is.character)
   if (sum(idx) > 0) {
     report_info1("Converting character variables to factor.")
-    X[, idx] = lapply(X[,idx], as.factor)
+    X[, idx] = lapply(X[, idx, drop=FALSE], as.factor)  # drop=FALSE handle the case where there only 1 factor
   }
   X
 }
+
+#' @export
+factor_diversity = function(fac) {
+  length(levels(fac)) / length(fac)
+}
+
+#' Remove highly diverse factors
+#' @export
+remove_hd_factors = function(X, threshold = 0.9){
+  idx = sapply(X, is.factor)
+  if (sum(idx) > 0) {
+    div_idx = sapply(X[, idx, drop=FALSE], factor_diversity) > threshold
+    div_locs = which(idx)[which(div_idx)]
+    div_count = length(div_locs)
+    if (div_count > 0) {
+      report_info1((sprintf("Removing %d highly diverse factors", div_count)))
+      X = X[, -div_locs]
+    }
+  }
+  X
+}
+
+count_factors = function(X) {
+  sum(sapply(X, is.factor))
+}
+
+count_numerics = function(X) {
+  sum(sapply(X, is.numeric))
+}
+
 
 factor_to_numeric = function(fac) {
   as.numeric(fac)-1

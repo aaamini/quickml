@@ -76,22 +76,37 @@ tune_dt = function(Xtrain, ytrain) {
 
 #' @export
 #' @importFrom glmnet glmnet
-fit_lr = function(Xpair, ypair, alpha = 0, hparams) {
-  model = glmnet(Xpair$train, factor(ypair$train), family="binomial", alpha=alpha, lambda=1)
+fit_rlr = function(Xpair, ypair, hparams) {
+  model = glmnet(Xpair$train, factor(ypair$train), family="binomial", alpha=hparams$alpha, lambda=hparams$lambda)
   yh_prob = as.numeric(predict(model, as.matrix(Xpair$test), type = "response"))
   list(yh_prob = yh_prob, model = model)
 }
 
-fit_lr2 = function(Xpair, ypair, hparams) {
-  fit_lr(Xpair, ypair, 0, hparams)
-}
 
-tune_lr2 = function(Xtrain, ytrain) {
-  NULL
+tune_rlr = function(Xtrain, ytrain) {
+  lambda_vec = 10^seq(-2, 2, len=25)
+  best_auc = -Inf
+  best_idx = NULL
+  best_alpha = NULL
+  for (a in seq(0,1,by=1)) { # can try seq(0,1,by=0.25) but due to a bug in glmnet the lambda that is found will lead to AUC = 0.5 in training
+    model = glmnet(Xpair$train, factor(ypair$train), family="binomial", alpha = a, lambda=lambda_vec)
+    Yh_prob = predict(model, as.matrix(Xpair$test), type = "response")
+    auc_values = apply(Yh_prob, 2, function(yh_prob) get_auc(ypair$test, yh_prob))
+
+    max_idx = which.max(auc_values)
+    max_auc = auc_values[max_idx]
+    if (max_auc > best_auc) {
+      best_auc = max_auc
+      best_idx = max_idx
+      best_alpha = a
+    }
+  }
+  list(alpha = best_alpha, lambda = signif(lambda_vec[best_idx],3))
 }
+# glmnet(Xpair$train, factor(ypair$train), family="binomial", alpha = .5, lambda = 6.8)
 
 #' @export
-#' @importFrom e1071
+#' @importFrom e1071 svm
 fit_ksvm = function(Xpair, ypair, hparams) {
   model = e1071::svm(Xpair$train, ypair$train,
       type = 'C-classification', # this is because we want to make a regression classification

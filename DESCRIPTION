@@ -1,7 +1,7 @@
 Package: quickml
 Type: Package
 Title: A package to run a quick ML benchmark on a binary classification task
-Version: 0.1.0
+Version: 0.2.0
 Author: Arash A. Amini
 Maintainer: The package maintainer <aaamini@ucla.edu>
 Description: The package allows one to quickly run a couple of most common binary classification algorithms on a new problem to get at idea of the limits of performance. It makes some guesses about the values of the hyper-parameters (mostly the default values!) and avoids hyper-parameter tuning in favor of performance. 

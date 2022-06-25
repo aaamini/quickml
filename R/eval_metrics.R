@@ -4,6 +4,11 @@ get_roc = function(y, yh_prob) {
   roc(y, yh_prob, quiet = TRUE)
 }
 #' @export
-get_auc = function(roc) {
+roc2auc = function(roc) {
   as.numeric(roc$auc)
+}
+
+#' @export
+get_auc = function(y, yh_prob) {
+  roc2auc(get_roc(y, yh_prob))
 }
