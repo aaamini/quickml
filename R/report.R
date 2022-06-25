@@ -25,11 +25,12 @@ plot_bench = function(res, save = FALSE, type = "pdf") {
     geom_boxplot() + theme_minimal(base_size = 12) +
     xlab("Method") + ylab("AUC") +
     theme(
-      legend.background = ggplot2::element_blank(),
-      legend.title = ggplot2::element_blank(),
-      legend.position = c(0.2, 0.2)
-      # axis.text.x = element_text(angle = 90)
-      # legend.text = ggplot2::element_text(size=18),
+      legend.position="none"
+      # legend.background = ggplot2::element_blank(),
+      # legend.title = ggplot2::element_blank(),
+      # legend.position = c(0.2, 0.2)
+      # # axis.text.x = element_text(angle = 90)
+      # # legend.text = ggplot2::element_text(size=18),
     ) +
     guides(colour = ggplot2::guide_legend(keywidth = 2, keyheight = 1.25))
   if (save) ggsave(sprintf("auc_boxplot.%s", type), width = 4, height = 4.5)
