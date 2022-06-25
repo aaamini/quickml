@@ -46,7 +46,7 @@ devtools::install_github("aaamini/quickml")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
+This is a basic example which shows you how to run it on the Sonar data from the `mlbench` library:
 
 ``` r
 library(quickml)
