@@ -20,7 +20,7 @@ Imports:
     dplyr,
     e1071,
     ggplot2,
-    glmnet,
+    glmnet (>= 4.1.4),
     pROC,
     randomForest,
     rpart,
