@@ -14,3 +14,14 @@ Suggests:
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 RoxygenNote: 7.1.1
+Imports: 
+    caret,
+    cli,
+    dplyr,
+    e1071,
+    ggplot2,
+    glmnet,
+    pROC,
+    randomForest,
+    rpart,
+    xgboost
