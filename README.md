@@ -13,7 +13,7 @@ handle any *raw* dataset, automatically cleaning it up, recoding
 factors, filtering problematic features, imputing missing values, doing
 some basic hyperparameter tuning, etc. By comparing the performance of multiple methods on the same task,
 it will give you an idea of the limits of performance achievable on the
-given dataset. In other words, it tells you how hard of classification
+given dataset. In other words, it tells you how hard of a classification
 task it is.
 
 Some of the pre-test steps are:
