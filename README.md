@@ -68,11 +68,12 @@ plot_bench(res, save = TRUE, type = "png")
 
 It produces the following output:
 
-![](man/figures/quickml_output.png){ width=550px }
+<img src="man/figures/quickml_output.png" alt="drawing" width="550"/>
 
 and the following plot:
 
-![](man/figures/auc_boxplot.png){ width=500px }
+<img src="man/figures/auc_boxplot.png" alt="drawing" width="500"/>
+
 
 
 
