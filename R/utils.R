@@ -1,6 +1,11 @@
 opt.env = new.env(parent = emptyenv())
 
 opt.env$verbose = 2
+opt.env$dt = TRUE
+opt.env$rf = TRUE
+opt.env$xgb = TRUE
+opt.env$rlr = TRUE
+opt.env$ksvm = TRUE
 
 #' @export
 sample_cols = function(X, size = ncol(X)) {
@@ -38,8 +43,13 @@ report_msg2 = function(msg) {
 }
 
 #' @export
-fastml_options = function(verbose = 2) {
+qml_options = function(verbose = 2, dt = TRUE, rf = TRUE, xgb = TRUE, rlr = TRUE, ksvm = TRUE) {
   opt.env$verbose = verbose
+  opt.env$dt = dt
+  opt.env$rf = rf
+  opt.env$xgb = xgb
+  opt.env$rlr = rlr
+  opt.env$ksvm = ksvm
 }
 # set_verbose = function(verbose) {
 #   opt.env$verbose = verbose

@@ -3,7 +3,7 @@ library(mlbench)
 set.seed(123)
 data("Sonar")
 # data("BreastCancer")
-# data("DNA")
+ #data("DNA")
 # data = DNA
 data = Sonar
 # data = BreastCancer
@@ -22,12 +22,10 @@ X = sample_cols(X, 60)
 
 # randomForest::rfImpute(X, y)
 
-fastml_options(verbose = 2)
+qml_options(verbose = 2, ksvm = F)
 res = quickml(X, y)
 summarize(res)
 plot(res, save = TRUE, type = "png")
-
-
 
 # X = char_to_factor(X)
 #

@@ -4,6 +4,17 @@ decide_nreps = function(X) {
   max(10, round(250 / (log(nrow(X)) + 2*log(ncol(X)))))
 }
 
+create_method_list = function() {
+  method_list = NULL
+  idx = c(opt.env$dt, opt.env$xgb, opt.env$rf, opt.env$rlr, opt.env$ksvm)
+
+  method_list = list(dt = c(tune_dt, fit_dt),
+                    xgb = c(tune_xgb, fit_xgb),
+                    rf = c(tune_rf, fit_rf),
+                    rlr = c(tune_rlr, fit_rlr),
+                    ksvm = c(tune_ksvm, fit_ksvm))
+  method_list[idx]
+}
 
 #' @export
 quickml = function(X, y,
@@ -45,11 +56,11 @@ quickml = function(X, y,
   # # report_msg1(sprintf("Running benchmark with nreps = %d\n", nreps))
   # report_info1(sprintf("Running benchmark with nreps = %d", nreps))
   train_idxs = get_splits(y, p = 0.7, times = nreps)
-  methods = list(dt = c(tune_dt, fit_dt),
-                 xgb = c(tune_xgb, fit_xgb),
-                 rf = c(tune_rf, fit_rf),
-                 rlr = c(tune_rlr, fit_rlr),
-                 ksvm = c(tune_ksvm, fit_ksvm))
+  methods = create_method_list()
+  if (is.null(methods)) {
+    report_info1("Nothing to do. Try selecting some methods using qml_options(). Returning.")
+    return(NULL)
+  }
   mtd_names = names(methods)
 
   # hparams = vector("list", length(methods))

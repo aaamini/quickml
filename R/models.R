@@ -51,10 +51,14 @@ tune_xgb = function(Xtrain, ytrain) {
 
 
 #' @export
-#' @importFrom randomForest randomForest
+#' @importFrom ranger ranger
 fit_rf = function(Xpair, ypair, hparams) {
-  model = randomForest(Xpair$train, factor(ypair$train))
-  yh_prob = predict(model, Xpair$test, type = "prob")[,1]
+  model = ranger::ranger(x = Xpair$train, y = factor(ypair$train), probability = TRUE)
+  yh_prob = predict(model, data = Xpair$test)$predictions[,1]
+
+  # Old implemntation used the randomForest package
+  # model = randomForest(Xpair$train, factor(ypair$train))
+  # yh_prob = predict(model, Xpair$test, type = "prob")[,1]
   list(yh_prob = yh_prob, model = model)
 }
 
