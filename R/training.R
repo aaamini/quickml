@@ -51,12 +51,12 @@ quickml = function(X, y,
   }
 
   X = code_factors(X, ord2int = opt.env$ord2int)
-  report_var_counts(X)
+
 
   X = remove_sparse_binary_features(X)
   report_info1("Dropping column names.")
   X = drop_colnames(X)
-  report_var_counts(X)
+
 
   class_prop = as.numeric(signif(table(y) / length(y),2))
   report_info1(paste0("Class proportions: ", paste0(class_prop, collapse = ", ")))
@@ -73,6 +73,7 @@ quickml = function(X, y,
 
   # hparams = vector("list", length(methods))
   # tune hyperparameters by splitting further train into train/validation sets
+  t_start = Sys.time()
   report_info1("Tuning hyperparameters ...")
   idx = train_idxs[[1]]
   hparams = lapply(seq_along(methods), function(j) {
@@ -86,9 +87,12 @@ quickml = function(X, y,
     report_msg1(sprintf("\t %4s: %s\n", mtd_names[j], tune_str))
     out
   })
+  report_succ1(sprintf("Tuning concluded successfully in %3.1f (sec).",
+                       Sys.time() - t_start))
 
   report_info1(sprintf("Running benchmark with nreps = %d", nreps))
   # do.call(rbind, mclapply(1:nreps, mc.cores = ncore, FUN = function(i) {
+  t_start = Sys.time()
   res = do.call(rbind, lapply(2:nreps, FUN = function(i) {
     report_msg2(sprintf("\t(%d / %d)\r", i, nreps))
     idx = train_idxs[[i]]
@@ -107,7 +111,9 @@ quickml = function(X, y,
       data.frame(rep = i, method = mtd_names[j], auc = roc2auc(roc), delta_t = delta_t)
     }))
   }))
-  report_succ1("Benchmark concluded successfully.")
+  report_succ1(sprintf("Benchmark concluded successfully in %3.1f (sec).",
+                       Sys.time() - t_start))
+
   attr(res, "class") = c("aucres", class(res))
   res
 }

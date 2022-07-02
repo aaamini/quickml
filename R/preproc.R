@@ -16,22 +16,28 @@ remove_sparse_binary_features = function(X, p = 0.7, N=1000, eps = 1/N) {
   # N = 100 # How many simulation to run
   # # p = 0.7  # probability of including in the training
   # eps = 1/N # the probability of observing a bad event
-  threshold = round(log(1-exp(log(1-eps)/N)) / log(1-p))
-  report_info1(sprintf("Removing sparse levels with frequency < %d", threshold))
-  # 2*log(N) /  -log(1-p)
+
 #  factor(X[,2], levels(X[,2])[table(X[,2]) >=  threshold]
 
   # Y = model.matrix(~., X %>% char_to_factor %>% remove_hd_factors)
   # Y = X %>% char_to_factor %>% remove_hd_factors %>% code_factors(F)
   int_cols = sapply(X, is.integer)
   Xint = X[int_cols]
-
   freqs = lapply(Xint, table)
   bin_cols = sapply(freqs, length) == 2    # select binary features
+  if (sum(bin_cols) == 0) return(X) # No binary features. Nothing to do
+
+  threshold = round(log(1-exp(log(1-eps)/N)) / log(1-p))
+  # 2*log(N) /  -log(1-p)
+
   Xbin = Xint[bin_cols]
   nonsparse_cols = sapply(freqs[bin_cols], min) >= threshold
+  if (sum(nonsparse_cols) == 0) return(X) # No sparse features; Nothing to do
+  report_info1(sprintf("Sparse binary features (frequency < %d) detected. Removing.", threshold))
 
-  cbind(Xbin[nonsparse_cols], Xint[!bin_cols], X[!int_cols])
+  new_X = cbind(Xbin[nonsparse_cols], Xint[!bin_cols], X[!int_cols])
+  report_var_counts(new_X)
+  new_X
   # X %>% lapply(table) %>% sapply(length) <= threshold
 }
 
@@ -112,7 +118,10 @@ code_factors = function(X, ord2int = TRUE) { #, drop_intercept = FALSE) {
   temp = subset(temp, select = -`(Intercept)`) # Removed the intercept
 
   temp = apply(temp, 2, as.integer)
-  cbind(temp, X[!idx])
+  new_X = cbind(temp, X[!idx])
+  report_var_counts(new_X)
+
+  new_X
 }
 
 collapse_factor_to_two = function(y) {
