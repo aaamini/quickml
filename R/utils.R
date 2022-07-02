@@ -6,6 +6,7 @@ opt.env$rf = TRUE
 opt.env$xgb = TRUE
 opt.env$rlr = TRUE
 opt.env$ksvm = TRUE
+opt.env$ord2int = TRUE
 
 #' @export
 sample_cols = function(X, size = ncol(X)) {
@@ -43,13 +44,16 @@ report_msg2 = function(msg) {
 }
 
 #' @export
-qml_options = function(verbose = 2, dt = TRUE, rf = TRUE, xgb = TRUE, rlr = TRUE, ksvm = TRUE) {
+qml_options = function(verbose = 2,
+                       dt = TRUE, rf = TRUE, xgb = TRUE, rlr = TRUE, ksvm = TRUE,
+                       ord2int = TRUE) {
   opt.env$verbose = verbose
   opt.env$dt = dt
   opt.env$rf = rf
   opt.env$xgb = xgb
   opt.env$rlr = rlr
   opt.env$ksvm = ksvm
+  opt.env$ord2int = ord2int
 }
 # set_verbose = function(verbose) {
 #   opt.env$verbose = verbose

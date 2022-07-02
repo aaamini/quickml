@@ -6,6 +6,34 @@ char_to_factor = function(X) {
   }
   X
 }
+drop_colnames = function(X) {
+  colnames(X) = paste0("X", 1:ncol(X))
+  X
+}
+
+# Works only for binary features, assume all columns are numeric (dbl or int)
+remove_sparse_binary_features = function(X, p = 0.7, N=1000, eps = 1/N) {
+  # N = 100 # How many simulation to run
+  # # p = 0.7  # probability of including in the training
+  # eps = 1/N # the probability of observing a bad event
+  threshold = round(log(1-exp(log(1-eps)/N)) / log(1-p))
+  report_info1(sprintf("Removing sparse levels with frequency < %d", threshold))
+  # 2*log(N) /  -log(1-p)
+#  factor(X[,2], levels(X[,2])[table(X[,2]) >=  threshold]
+
+  # Y = model.matrix(~., X %>% char_to_factor %>% remove_hd_factors)
+  # Y = X %>% char_to_factor %>% remove_hd_factors %>% code_factors(F)
+  int_cols = sapply(X, is.integer)
+  Xint = X[int_cols]
+
+  freqs = lapply(Xint, table)
+  bin_cols = sapply(freqs, length) == 2    # select binary features
+  Xbin = Xint[bin_cols]
+  nonsparse_cols = sapply(freqs[bin_cols], min) >= threshold
+
+  cbind(Xbin[nonsparse_cols], Xint[!bin_cols], X[!int_cols])
+  # X %>% lapply(table) %>% sapply(length) <= threshold
+}
 
 #' @export
 factor_diversity = function(fac) {
@@ -36,24 +64,54 @@ count_numerics = function(X) {
   sum(sapply(X, is.numeric))
 }
 
+count_ints = function(X) {
+  sum(sapply(X, is.integer))
+}
+
+count_dbls = function(X) {
+  sum(sapply(X, is.double))
+}
 
 factor_to_numeric = function(fac) {
   as.numeric(fac)-1
 }
 
-code_factors = function(X, drop_intercept = FALSE) {
+code_ordinal_factors = function(X, ord2int = TRUE) {
+  idx = sapply(X, is.ordered)
+  if (sum(idx) ==  0) return(X) # Nothing to do
+
+  if (ord2int) {
+    report_info1("Coding ordinal factors into integers.")
+    X[,idx] = lapply(X[, idx], as.integer)
+    return(X)
+  }
+
+  report_info1("Coding ordinal factors using poly contrast.")
+  temp = model.matrix(~., X[, idx])
+  temp = subset(temp, select = -`(Intercept)`) # Removed the intercept
+  cbind(temp, X[!idx])
+}
+
+code_factors = function(X, ord2int = TRUE) { #, drop_intercept = FALSE) {
   if (is.null(dim(X))) {
     # X is a vector,
     stop("Univariate models are not implemented yet. X should have 2 dimensions.")
   }
+
+  # Deal with ordinal variables
+  X = code_ordinal_factors(X, ord2int)
+
+  # Ordered factors are excluded at this point. Only nominal factors remain.
   idx = sapply(X, is.factor)
   if (sum(idx) == 0) return(X) # nothing to do
 
-  report_info1("Coding factors into dummy variables.")
+  report_info1("Coding (nominal) factors into dummy variables.")
   temp = model.matrix(~ ., X[,idx])
   groups = attr(temp,"assign")  # for future use, groups of created dummy variables
-  if (drop_intercept) temp = subset(temp, select = -`(Intercept)`)
+  # if (drop_intercept) temp = subset(temp, select = -`(Intercept)`)
+  temp = subset(temp, select = -`(Intercept)`) # Removed the intercept
 
+  temp = apply(temp, 2, as.integer)
   cbind(temp, X[!idx])
 }
 

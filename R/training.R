@@ -25,6 +25,8 @@ quickml = function(X, y,
   if (!is.null(dim(y))) stop("y should be a vector.")
   if (nrow(X) != length(y)) stop("nrow(X) should be the same as length(y).")
 
+  report_var_counts(X)
+
   y_na_idx = is.na(y)
   if (any(y_na_idx)) {
     report_info1("Missing values in `y`. Removing the corresponding rows.")
@@ -32,12 +34,15 @@ quickml = function(X, y,
     y = y[!y_na_idx]
   }
 
+  # Process y
   if (!is.factor(y)) y = factor(y)
   if (length(levels(y)) != 2) {
     report_info1("Only binary classification implemented: Collapsing 'y' to two levels.\n")
     y = collapse_factor_to_two(y)
   }
   y = factor_to_numeric(y)
+
+  # Process X
   X = char_to_factor(X)
   X = remove_hd_factors(X)
 
@@ -45,10 +50,13 @@ quickml = function(X, y,
     stop("Missing values in features. Imputation not implemented yet. Stopping.")
   }
 
-  X = code_factors(X, drop_intercept = TRUE)
+  X = code_factors(X, ord2int = opt.env$ord2int)
+  report_var_counts(X)
 
-  report_info1(sprintf("Data (now) has %d samples on %d variables (%d factors, %d numeric)",
-                       nrow(X), ncol(X), count_factors(X), count_numerics(X)))
+  X = remove_sparse_binary_features(X)
+  report_info1("Dropping column names.")
+  X = drop_colnames(X)
+  report_var_counts(X)
 
   class_prop = as.numeric(signif(table(y) / length(y),2))
   report_info1(paste0("Class proportions: ", paste0(class_prop, collapse = ", ")))
