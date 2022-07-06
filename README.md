@@ -29,12 +29,12 @@ Some of the pre-test steps are:
 
 Currently the following algorithms are used for the benchmark:
 
--   **Random Forest (RF)**: No tuning.
--   **Gradient Boosted Trees (XGB)**: XGBoost implementation. Basic tuning (number of rounds by early stopping on validation AUC, max_depth, eta).
+-   **Random Forest (RF)**: Fast [`ranger` implementation](https://github.com/imbs-hl/ranger). No tuning.
+-   **Gradient Boosted Trees (XGB)**: [XGBoost implementation](https://github.com/dmlc/xgboost). Basic tuning (number of rounds by early stopping on validation AUC, max_depth, eta).
 -   **Regularized Logistic Regression (RLR)**: L2-regularized. `glmnet` implementation.
     <!--- with alpha parameter decided between 0 or 1 (L2 vs. L1regularization, respectively) during hyperparameter tuning.--->
     Regularization parameter lambda is tuned.
--   **Decision Tree (DecT)**: A single decision tree. No tuning.
+-   **Decision Tree (DecT)**: A single decision tree. No tuning. `rpart` implementation. 
 -   **Kernel SVM (KSVM)**: SVM with the Gaussian (a.k.a Radial Basis) kernel. No tuning.
 
 ## Installation
