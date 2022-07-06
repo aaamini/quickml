@@ -44,6 +44,7 @@ quickml is under development. You can install the latest version in R by running
 ``` r
 devtools::install_github("aaamini/quickml")
 ```
+For a list of package dependencies see the *Imports* section of the [DESCRIPTION file](https://github.com/aaamini/quickml/blob/main/DESCRIPTION). The above command should automatically install the necessary packages. An exception is when you have an older version of packate installed and newer version is needed in which case R throws an error. You have to manually upgrade that package. In particular, make sure your `glmnet` package is up to date.
 
 ## Example
 
@@ -70,6 +71,9 @@ It produces the following output:
 and the following plot:
 
 <img src="man/figures/auc_boxplot.png" alt="drawing" width="500"/>
+
+# Known bugs
+- XGB could take a very long time on certain machines (with lots of cores?). The fix is to reduced the `nthread` parameter. This fix is on the TODO list.
 
 
 
