@@ -44,7 +44,7 @@ quickml is under development. You can install the latest version in R by running
 ``` r
 devtools::install_github("aaamini/quickml")
 ```
-For a list of package dependencies see the *Imports* section of the [DESCRIPTION file](https://github.com/aaamini/quickml/blob/main/DESCRIPTION). The above command should automatically install the necessary packages. An exception is when you have an older version of packate installed and newer version is needed in which case R throws an error. You have to manually upgrade that package. In particular, make sure your `glmnet` package is up to date.
+For a list of package dependencies see the *Imports* section of the [DESCRIPTION file](https://github.com/aaamini/quickml/blob/main/DESCRIPTION). The above command should automatically install the necessary packages. An exception is when you have an older version of a package installed and a newer version is needed, in which case `R` throws an error. You have to manually upgrade that package. In particular, make sure your `glmnet` package is up to date.
 
 ## Example
 
