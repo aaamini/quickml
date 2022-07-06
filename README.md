@@ -73,7 +73,7 @@ and the following plot:
 <img src="man/figures/auc_boxplot.png" alt="drawing" width="500"/>
 
 # Known bugs
-- XGB could take a very long time on certain machines (with lots of cores?). The fix is to reduced the `nthread` parameter. This fix is on the TODO list.
+- XGB could take a very long time on certain machines (with lots of cores?). The fix is to reduce the `nthread` parameter. This fix is on the TODO list.
 
 
 
