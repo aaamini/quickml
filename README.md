@@ -21,19 +21,20 @@ Some of the pre-test steps are:
 -   Converting character features to factors (i.e., categorical
     variables).
 -   Removing highly diverse factors (e.g., phone numbers or IDs).
--   TODO: Removing almost constant factors
--   Coding factors into dummy variables.
+-   Removing sparse factor levels (those that will most likely lead to a constant level in train/test splits).
+-   Coding ordinal factors either into integer or using polynomial contrasts (two options as of now).
+-   Coding nominal factors into dummy variables.
 -   TODO: Imputing on train/test.
 -   Hyperparameter tuning for some of the algorithms.
 
 Currently the following algorithms are used for the benchmark:
 
--   **Random Forest (RF)**: No tuning.
--   **Gradient Boosted Trees (XGB)**: XGBoost implementation. Basic tuning (number of rounds by early stopping on validation AUC, max_depth, eta).
+-   **Random Forest (RF)**: Fast [`ranger` implementation](https://github.com/imbs-hl/ranger). No tuning.
+-   **Gradient Boosted Trees (XGB)**: [XGBoost implementation](https://github.com/dmlc/xgboost). Basic tuning (number of rounds by early stopping on validation AUC, max_depth, eta).
 -   **Regularized Logistic Regression (RLR)**: L2-regularized. `glmnet` implementation.
     <!--- with alpha parameter decided between 0 or 1 (L2 vs. L1regularization, respectively) during hyperparameter tuning.--->
     Regularization parameter lambda is tuned.
--   **Decision Tree (DecT)**: A single decision tree. No tuning.
+-   **Decision Tree (DecT)**: A single decision tree. No tuning. `rpart` implementation. 
 -   **Kernel SVM (KSVM)**: SVM with the Gaussian (a.k.a Radial Basis) kernel. No tuning.
 
 ## Installation
@@ -43,6 +44,7 @@ quickml is under development. You can install the latest version in R by running
 ``` r
 devtools::install_github("aaamini/quickml")
 ```
+For a list of package dependencies see the *Imports* section of the [DESCRIPTION file](https://github.com/aaamini/quickml/blob/main/DESCRIPTION). The above command should automatically install the necessary packages. An exception is when you have an older version of a package installed and a newer version is needed, in which case `R` throws an error. You have to manually upgrade that package. In particular, make sure your `glmnet` package is up to date.
 
 ## Example
 
@@ -69,6 +71,9 @@ It produces the following output:
 and the following plot:
 
 <img src="man/figures/auc_boxplot.png" alt="drawing" width="500"/>
+
+# Known bugs
+- XGB could take a very long time on certain machines (with lots of cores?). The fix is to reduce the `nthread` parameter. This fix is on the TODO list.
 
 
 
