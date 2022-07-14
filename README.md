@@ -24,7 +24,7 @@ Some of the pre-test steps are:
 -   Removing sparse factor levels (those that will most likely lead to a constant level in train/test splits).
 -   Coding ordinal factors either into integer or using polynomial contrasts (two options as of now).
 -   Coding nominal factors into dummy variables.
--   TODO: Imputing on train/test.
+-   Imputation before train/test split using missRanger.
 -   Hyperparameter tuning for some of the algorithms.
 
 Currently the following algorithms are used for the benchmark:
