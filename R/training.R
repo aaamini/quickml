@@ -25,7 +25,7 @@ quickml = function(X, y,
   if (!is.null(dim(y))) stop("y should be a vector.")
   if (nrow(X) != length(y)) stop("nrow(X) should be the same as length(y).")
 
-  report_var_counts(X)
+  report_sample_size_and_var_counts(X)
 
   y_na_idx = is.na(y)
   if (any(y_na_idx)) {
@@ -47,11 +47,13 @@ quickml = function(X, y,
   X = remove_hd_factors(X)
 
   if (any(is.na(X))) {
-    stop("Missing values in features. Imputation not implemented yet. Stopping.")
+    # stop("Missing values in features. Imputation not implemented yet. Stopping.")
+    report_info1(sprintf("Missing values in features (%2.2f%%). Imputing using missRanger (before split).",
+                         sum(is.na(X))/prod(dim(X))*100))
+    X <- missRanger(X, num.trees = 100, verbose = 0, maxiter = 3)
   }
 
   X = code_factors(X, ord2int = opt.env$ord2int)
-
 
   X = remove_sparse_binary_features(X)
   report_info1("Dropping column names.")

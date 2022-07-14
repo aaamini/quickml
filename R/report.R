@@ -1,10 +1,18 @@
 #
 report_var_counts = function(X){
-  report_info1(sprintf("Data (now) has %d samples on %d variables (%d fac, %d num = [%d int, %d dbl])",
+  report_info1(sprintf("[Var Count] %d variables: %d fac, %d num = [%d int, %d dbl]",
+                       ncol(X), count_factors(X), count_numerics(X), count_ints(X), count_dbls(X)))
+
+
+}
+
+report_sample_size_and_var_counts = function(X){
+  report_info1(sprintf("Data has %d samples on %d variables (%d fac, %d num = [%d int, %d dbl])",
                        nrow(X), ncol(X), count_factors(X), count_numerics(X), count_ints(X), count_dbls(X)))
 
 
 }
+
 
 #' @export
 rename_methods = function(res) {
