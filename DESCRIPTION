@@ -20,7 +20,7 @@ Imports:
     dplyr,
     e1071,
     ggplot2,
-    glmnet (>= 4.1.4),
+    glmnet (>= 4.1.2),
     pROC,
     ranger,
     rpart,

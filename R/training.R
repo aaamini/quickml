@@ -17,6 +17,7 @@ create_method_list = function() {
 }
 
 #' @export
+#' @import missRanger
 quickml = function(X, y,
                      nreps = NULL,
                      # ncore = 1,
